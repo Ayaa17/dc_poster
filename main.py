@@ -16,14 +16,32 @@ async def on_ready():
     await channel.send(f">>Bot is online<<")
 
 
+@bot.command()
+async def load(ctx, extension):
+    bot.load_extension(f'cmds.{extension}')
+    await ctx.send(f"Loaded {extension} ")
+
+@bot.command()
+async def reload(ctx, extension):
+    bot.reload_extension(f'cmds.{extension}')
+    await ctx.send(f"ReLoaded {extension} ")
+
+@bot.command()
+async def unload(ctx, extension):
+    bot.unload_extension(f"cmds.{extension}")
+    await ctx.send(f"UnLoaded {extension} ")
+
+
 
 for filename in os.listdir('./cmds'):
     if(filename.endswith('.py')):
-        try:
-            bot.load_extension(f"cmds.{filename[:-3]}")
-            print("import: "+filename)
-        except:
-            print("import: " + filename+" fail")
+        bot.load_extension(f"cmds.{filename[:-3]}")
+
+        # try:
+        #     bot.load_extension(f"cmds.{filename[:-3]}")
+        #     print("import: "+filename)
+        # except:
+        #     print("import: " + filename+" fail")
 
 # 啟動bot()token
 if __name__ =='__main__':

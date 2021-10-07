@@ -1,0 +1,40 @@
+class user:
+
+    def __init__(self):
+        self.id = None
+        self.username = None
+        self.full_name = None
+        self.fbid = None
+        self.biography = None
+        self.edge_owner_to_timeline_media = None
+        self.edge_followed_by =None
+        self.edge_follow = None
+        self.edge_mutual_followed_by = None
+        self.external_url = None
+        self.country_block = None
+        self.has_ar_effects =None
+        self.has_clips = None
+        self.has_guides = None
+        self.has_channel = None
+        self.highlight_reel_count = None
+        self.hide_like_and_view_counts = None
+        self.is_business_account = None
+        self.is_professional_account =None
+        self.is_joined_recently = None
+        self.business_address_json =None
+        self.business_contact_method = None
+        self.business_email = None
+        self.business_phone_number = None
+        self.business_category_name = None
+        self.overall_category_name = None
+        self.category_enum = None
+        self.category_name = None
+        self.is_private = None
+        self.is_verified = None
+        self.should_show_category = None
+        self.should_show_public_contacts = None
+        self.connected_fb_page = None
+        self.pronouns = None
+        self.deployment_stage = None
+        self.mid_pct = None
+        self.seo_category_infos = None

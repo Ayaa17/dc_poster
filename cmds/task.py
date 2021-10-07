@@ -28,5 +28,8 @@ class task(commands.Cog):
         await self.channel.send(f"Change to {self.channel} : {prechannel.mention}->{self.channel.mention}")
 
 
+
+
+
 def setup(bot):
     bot.add_cog(task(bot))
