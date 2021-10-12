@@ -35,13 +35,12 @@ async def unload(ctx, extension):
 
 for filename in os.listdir('./cmds'):
     if(filename.endswith('.py')):
-        bot.load_extension(f"cmds.{filename[:-3]}")
-
-        # try:
-        #     bot.load_extension(f"cmds.{filename[:-3]}")
-        #     print("import: "+filename)
-        # except:
-        #     print("import: " + filename+" fail")
+        # bot.load_extension(f"cmds.{filename[:-3]}")
+        try:
+            bot.load_extension(f"cmds.{filename[:-3]}")
+            print("import: "+filename)
+        except:
+            print("import: " + filename+" fail")
 
 # 啟動bot()token
 if __name__ =='__main__':

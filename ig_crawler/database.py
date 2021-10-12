@@ -179,3 +179,29 @@ def serchShortcode(db_name, table_name, shortcode):
     cursor = con.cursor()
     result = cursor.execute(SqlTableQ).fetchall()
     return result
+
+def serchNew(db_name, table_name):
+    """
+    是否有相同post
+    :param db_name:
+    :return:
+    """
+    SqlTableQ = """select shortcode from '{table_name}' where is_send='False' ORDER by taken_at_timestamp DESC """
+    SqlTableQ=SqlTableQ.format(table_name=table_name)
+    con = sqlite3.connect(db_name)
+    cursor = con.cursor()
+    result = cursor.execute(SqlTableQ).fetchall()
+    return result
+
+def updateSendDB(file_name, database_name, _Table_name):
+    # 已存
+    con = sqlite3.connect(database_name)
+    cursor = con.cursor()
+    sql_isSendload_pre = "update '{Table_name}' set is_send='Ture' where shortcode = '"
+    sql_isSendload_pre = sql_isSendload_pre.format(Table_name=_Table_name)
+    sql_isSendload = sql_isSendload_pre + file_name + "'"
+    cursor.execute(sql_isSendload)
+    con.commit()
+    cursor.close()
+    con.close()
+    print("DB is_send = True")

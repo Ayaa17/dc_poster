@@ -7,7 +7,7 @@ import requests
 from selenium import webdriver
 import sqlite3
 
-import init
+import ig_crawler.init as init
 
 
 def main(islogin, browser, database_name, username):
@@ -112,6 +112,7 @@ def updateDB(file_name, database_name, _Table_name):
     cursor.close()
     con.close()
     print("DB is_download = True")
+
 
 
 def save_media(shortcode_media, file_loc_str, file_name, database_name, _Table_name):

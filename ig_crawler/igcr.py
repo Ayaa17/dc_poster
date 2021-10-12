@@ -1,18 +1,17 @@
 # import json
-# import os
+import os
 # import sqlite3
 import time
 
 from selenium import webdriver
 
 from bs4 import BeautifulSoup as Soup
-# import requests
-# import ig_crawler.database
-# import downloadpost
-# import getindex
+
+import ig_crawler.downloadpost as downloadpost
+
 import ig_crawler.getinfo as getinfo
-# import getstroies
 import ig_crawler.init
+from ig_crawler import database
 
 
 class Singleton(object):
@@ -55,6 +54,40 @@ class Singleton(object):
 
     def refresh(self):
         url = ig_crawler.init.url_main + self._username + "/"
-        getinfo.refresh(self._browser, url, self.islogin, self._database_name, self._username)
-
+        is_new = getinfo.refresh(self._browser, url, self.islogin, self._database_name, self._username)
+        print("是否有新Post"+str(is_new))
         print("refresh")
+        return is_new
+
+    def downlaod(self):
+        print(self._username + "get Post...", end="")
+        downloadpost.main(self.islogin, self._browser, self._database_name, self._username)
+        print("OVER!!")
+        return
+
+    def sendNew(self):
+        newPostShortcode=database.serchNew(self._database_name,self._username)
+        print(len(newPostShortcode))
+        for i in newPostShortcode:
+            database.updateSendDB(i[0],self._database_name,self._username)
+        return newPostShortcode
+
+    def sendNewPost(self,username):
+        file_dir_pre = ".\\media\\{username}\\"
+        file_dir = file_dir_pre.format(username=username)
+        is_new = self.setusername(username).refresh()
+        print(str(is_new))
+        all_pic_loc = []
+        if (is_new):
+            self.downlaod()
+            code_new = self.sendNew()
+            for i in code_new:
+                print(i[0])
+                fileExt = i[0]
+                for j in os.listdir(file_dir):
+                    if (j.find(fileExt) != -1):
+                        print(j)
+                        # send
+                        pic_loc = file_dir + j
+                        all_pic_loc.append(pic_loc)
+        return all_pic_loc

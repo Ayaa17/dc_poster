@@ -175,7 +175,7 @@ def getnextxhr(browser, cursor, user_id, database_name, username):
 def refresh(browser, url, islogin, database_name, username):
     # 確認DB是否有該表
     database.check(database_name, username)
-
+    is_new_post = False
     counter = 0
     (cursor, flag, user, list_temp) = getfirstxhr(browser, url, islogin)
     print(str(user["id"])+":"+username)
@@ -188,9 +188,10 @@ def refresh(browser, url, islogin, database_name, username):
 
         if (len(fetch_result) > 0):
             print("is Old post")
-            return
+            return is_new_post
         else:
             print("is New post")
+            is_new_post = True
             database.main_getinfo([i], database_name, username)
         # except:
         #     print("serchShortcode WRONG"+username+"+"+shortcode)
@@ -208,9 +209,10 @@ def refresh(browser, url, islogin, database_name, username):
                     fetch_result = database.serchShortcode(database_name, username, shortcode)
                     if (len(fetch_result) > 0):
                         print("is Old post")
-                        return
+                        return is_new_post
                     else:
                         print("is New post")
+                        is_new_post = True
                         database.main_getinfo([i], database_name, username)
                 except:
                     print("serchShortcode WRONG"+username+"+"+shortcode)
@@ -219,4 +221,4 @@ def refresh(browser, url, islogin, database_name, username):
             print("something wrong userid : " + user["id"])
             print("something wrong cursor : " + cursor)
 
-            return
+            return is_new_post
