@@ -1,16 +1,11 @@
 # import json
 import os
-# import sqlite3
 import time
 
 from selenium import webdriver
-
-from bs4 import BeautifulSoup as Soup
-
-import ig_crawler.downloadpost as downloadpost
-
-import ig_crawler.getinfo as getinfo
-import ig_crawler.init
+from ig_crawler import downloadpost
+from ig_crawler import getinfo
+from ig_crawler import init
 from ig_crawler import database
 
 
@@ -32,7 +27,7 @@ class Singleton(object):
         pass
 
     def login(self):
-        self._browser.get(ig_crawler.init.url_main)
+        self._browser.get(init.url_main)
         print("Enter account: ")
         account = input()
         print("Enter password:　")
@@ -48,15 +43,15 @@ class Singleton(object):
         return self
 
     def geturl(self):
-        url = ig_crawler.init.url_main + self._username + "/"
+        url = init.url_main + self._username + "/"
         self._browser.get(url)
         print(self._username)
 
     def refresh(self):
-        url = ig_crawler.init.url_main + self._username + "/"
+        url = init.url_main + self._username + "/"
         is_new = getinfo.refresh(self._browser, url, self.islogin, self._database_name, self._username)
-        print("是否有新Post"+str(is_new))
-        print("refresh")
+        print("是否有新Post :"+str(is_new))
+        # print("refresh")
         return is_new
 
     def downlaod(self):
@@ -73,20 +68,21 @@ class Singleton(object):
         return newPostShortcode
 
     def sendNewPost(self,username):
-        file_dir_pre = ".\\media\\{username}\\"
+        # file_dir_pre = ".\\media\\{username}\\"
+        file_dir_pre = init.file_dir
         file_dir = file_dir_pre.format(username=username)
         is_new = self.setusername(username).refresh()
-        print(str(is_new))
+        # print(str(is_new))
         all_pic_loc = []
         if (is_new):
             self.downlaod()
             code_new = self.sendNew()
             for i in code_new:
-                print(i[0])
+                # print(i[0])
                 fileExt = i[0]
                 for j in os.listdir(file_dir):
                     if (j.find(fileExt) != -1):
-                        print(j)
+                        # print(j)
                         # send
                         pic_loc = file_dir + j
                         all_pic_loc.append(pic_loc)

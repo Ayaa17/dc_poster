@@ -7,7 +7,7 @@ import requests
 from selenium import webdriver
 import sqlite3
 
-import ig_crawler.init as init
+from ig_crawler import init
 
 
 def main(islogin, browser, database_name, username):
@@ -30,7 +30,8 @@ def main(islogin, browser, database_name, username):
         return
     cursor.close()
     con.close()
-    file_loc_str = './media/'
+    # file_loc_str = './media/'
+    file_loc_str = init.fileFolder_dir;
     file_loc_str = file_loc_str + result[0][0] + "/"
 
     os.makedirs(file_loc_str, exist_ok=True)
@@ -47,7 +48,8 @@ def main(islogin, browser, database_name, username):
         # need wait some time to avoid blockade
         time.sleep(1)
 
-        file_loc_str = './media/'
+        # file_loc_str = './media/'
+        file_loc_str = init.fileFolder_dir;
         file_loc_str = file_loc_str + result[i][0] + "/"  # username
         file_name = result[i][5]  # shortcode
         post_url = post_pre_url + file_name + "/"

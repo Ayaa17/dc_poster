@@ -52,7 +52,7 @@ class time(commands.Cog):
                     for i in newpost:
                         pic = discord.File(i)
                         await ctx.send(file=pic)
-            await asyncio.sleep(60)  # 單位:秒
+            await asyncio.sleep(600)  # 單位:秒
 
     @commands.command()
     async def stoplisten(self, ctx):

@@ -179,12 +179,12 @@ def refresh(browser, url, islogin, database_name, username):
     counter = 0
     (cursor, flag, user, list_temp) = getfirstxhr(browser, url, islogin)
     print(str(user["id"])+":"+username)
-    print(cursor)
+    # print(cursor)
     for i in list_temp:
         # try:
         shortcode = i.shortcode
         fetch_result = database.serchShortcode(database_name, username, shortcode)
-        print(shortcode)
+        # print(shortcode)
 
         if (len(fetch_result) > 0):
             print("is Old post")
