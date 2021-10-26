@@ -193,6 +193,20 @@ def serchNew(db_name, table_name):
     result = cursor.execute(SqlTableQ).fetchall()
     return result
 
+def serchDescription(db_name, table_name,shortcode):
+    """
+    是否有相同post
+    :param db_name:
+    :return:
+    """
+    SqlTableQ = """select edge_media_to_caption from '{table_name}' where shortcode='{shortcode}' ORDER by taken_at_timestamp DESC """
+    SqlTableQ=SqlTableQ.format(table_name=table_name,shortcode=str(shortcode))
+    print(SqlTableQ)
+    con = sqlite3.connect(db_name)
+    cursor = con.cursor()
+    result = cursor.execute(SqlTableQ).fetchall()
+    return result
+
 def updateSendDB(file_name, database_name, _Table_name):
     # 已存
     con = sqlite3.connect(database_name)

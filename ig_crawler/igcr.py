@@ -40,6 +40,7 @@ class Singleton(object):
 
     def setusername(self, username):
         self._username = username
+        self._url_Target = init.url_main + username + "/"
         return self
 
     def geturl(self):
@@ -59,6 +60,14 @@ class Singleton(object):
         downloadpost.main(self.islogin, self._browser, self._database_name, self._username)
         print("OVER!!")
         return
+
+    def getNew(self):
+        newPostShortcode=database.serchNew(self._database_name,self._username)
+        return newPostShortcode
+    def getDescription(self,shortcode):
+        print(self._database_name,self._username)
+        description = database.serchDescription(self._database_name,self._username,shortcode)
+        return description
 
     def sendNew(self):
         newPostShortcode=database.serchNew(self._database_name,self._username)
