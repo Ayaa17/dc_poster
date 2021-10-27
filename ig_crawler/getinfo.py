@@ -88,6 +88,8 @@ def getfirstxhr(browser, url, islogin):
     user_name = user["username"]
     user_id = user["id"]
     user_fbid = user["fbid"]
+    user_img = user['profile_pic_url_hd']
+    write2json(user_name, user_img)
 
     edges = js_data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_owner_to_timeline_media"]["edges"]
     page_info = js_data["entry_data"]["ProfilePage"][0]["graphql"]["user"]["edge_owner_to_timeline_media"]['page_info']
@@ -178,7 +180,7 @@ def refresh(browser, url, islogin, database_name, username):
     is_new_post = False
     counter = 0
     (cursor, flag, user, list_temp) = getfirstxhr(browser, url, islogin)
-    print(str(user["id"])+":"+username)
+    print(str(user["id"]) + ":" + username)
     # print(cursor)
     for i in list_temp:
         # try:
@@ -215,10 +217,29 @@ def refresh(browser, url, islogin, database_name, username):
                         is_new_post = True
                         database.main_getinfo([i], database_name, username)
                 except:
-                    print("serchShortcode WRONG"+username+"+"+shortcode)
+                    print("serchShortcode WRONG" + username + "+" + shortcode)
 
         except:
             print("something wrong userid : " + user["id"])
             print("something wrong cursor : " + cursor)
 
             return is_new_post
+
+
+def write2json(username='', icon=''):
+    # json_r = open('setting.json', "r", encoding='utf8')
+    print(username,icon)
+    # json_r[username]["icon"] = icon
+    # json_r.close()
+    #
+    # file2 = open('setting.json', "w", encoding='utf8')
+    # json.dump(json_r, file2)
+    # file2.close()
+
+    with open('setting.json', mode='r', encoding='utf8') as jFile:
+        jdata = json.load(jFile)
+        jdata[username]["icon"] = icon
+        print(jdata[username])
+    with open("setting.json", mode="w", encoding="utf8") as jFile:
+        json.dump(jdata, jFile, indent=4)
+

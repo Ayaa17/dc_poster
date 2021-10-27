@@ -69,6 +69,20 @@ class Singleton(object):
         description = database.serchDescription(self._database_name,self._username,shortcode)
         return description
 
+    def getNewPost(self,username):
+        # file_dir_pre = ".\\media\\{username}\\"
+        file_dir_pre = init.file_dir
+        file_dir = file_dir_pre.format(username=username)
+        all_pic_loc = []
+        code_new = self.getNew()
+        for i in code_new:
+            fileExt = i[0]
+            for j in os.listdir(file_dir):
+                if (j.find(fileExt) != -1):
+                    pic_loc = file_dir + j
+                    all_pic_loc.append(pic_loc)
+        return all_pic_loc
+
     def sendNew(self):
         newPostShortcode=database.serchNew(self._database_name,self._username)
         print(len(newPostShortcode))

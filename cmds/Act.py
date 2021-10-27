@@ -80,7 +80,21 @@ class Act(commands.Cog):
         aa=igcr1.Singleton().setusername("solarkeem").getNew()
         for i in aa:
             print(i[0])
+        return
 
+    @commands.command()
+    async def az(self, ctx):
+        aa = igcr1.Singleton().setusername("whee_inthemood").refresh()
+        print(str(aa))
+        return
+
+    @commands.command()
+    async def aza(self, ctx):
+        with open('setting.json', mode='r', encoding='utf8') as jFile:
+            jdata = json.load(jFile)
+            username="whee_inthemood"
+
+            print(jdata[username]['icon'])
         return
 
 def setup(bot):

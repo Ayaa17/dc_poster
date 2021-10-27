@@ -2,9 +2,26 @@
     "TOKEN": "ODkzNzY3MDEzMjI1MzU3MzMz.YVgPZQ.PJ1xgwilq6AbliyXU8CTSPNETwM",
     "channel_poster": 893783854190583849,
     "time": "1502",
-    "Ig": ["mo_onbyul","solarkeem","whee_inthemood","_mariahwasa"],
-    "mo_onbyul": "https://www.instagram.com/mo_onbyul/",
-    "solarkeem":"https://www.instagram.com/solarkeem/",
-    "whee_inthemood": "https://www.instagram.com/whee_inthemood/",
-    "_mariahwasa": "https://www.instagram.com/_mariahwasa/"
+    "Ig": [
+        "mo_onbyul",
+        "solarkeem",
+        "whee_inthemood",
+        "_mariahwasa"
+    ],
+    "mo_onbyul": {
+        "url": "https://www.instagram.com/mo_onbyul/",
+        "icon": "https://instagram.ftpe7-2.fna.fbcdn.net/v/t51.2885-19/s150x150/131547366_429682848415962_2581903844010005512_n.jpg?_nc_ht=instagram.ftpe7-2.fna.fbcdn.net&_nc_ohc=IAzXdTc_E4cAX_71VFE&tn=u8MtQw1EVq2HN46M&edm=ABfd0MgBAAAA&ccb=7-4&oh=a17ebb48842ffb99b73d7e34dd7c3079&oe=617FC76F&_nc_sid=7bff83"
+    },
+    "solarkeem": {
+        "url": "https://www.instagram.com/solarkeem/",
+        "icon": "https://instagram.ftpe7-2.fna.fbcdn.net/v/t51.2885-19/s150x150/131547366_429682848415962_2581903844010005512_n.jpg?_nc_ht=instagram.ftpe7-2.fna.fbcdn.net&_nc_ohc=IAzXdTc_E4cAX_71VFE&tn=u8MtQw1EVq2HN46M&edm=ABfd0MgBAAAA&ccb=7-4&oh=a17ebb48842ffb99b73d7e34dd7c3079&oe=617FC76F&_nc_sid=7bff83"
+    },
+    "whee_inthemood": {
+        "url": "https://www.instagram.com/whee_inthemood/",
+        "icon": "https://instagram.ftpe7-2.fna.fbcdn.net/v/t51.2885-19/s320x320/93244821_532419730753155_6532837603031384064_n.jpg?_nc_ht=instagram.ftpe7-2.fna.fbcdn.net&_nc_ohc=VgfVfup5f9EAX_dtW0A&edm=ABfd0MgBAAAA&ccb=7-4&oh=66428ef4c576943dddf8cde5660df114&oe=6180C582&_nc_sid=7bff83"
+    },
+    "_mariahwasa": {
+        "url": "https://www.instagram.com/_mariahwasa/",
+        "icon": "https://instagram.ftpe7-2.fna.fbcdn.net/v/t51.2885-19/s150x150/131547366_429682848415962_2581903844010005512_n.jpg?_nc_ht=instagram.ftpe7-2.fna.fbcdn.net&_nc_ohc=IAzXdTc_E4cAX_71VFE&tn=u8MtQw1EVq2HN46M&edm=ABfd0MgBAAAA&ccb=7-4&oh=a17ebb48842ffb99b73d7e34dd7c3079&oe=617FC76F&_nc_sid=7bff83"
+    }
 }

@@ -201,7 +201,7 @@ def serchDescription(db_name, table_name,shortcode):
     """
     SqlTableQ = """select edge_media_to_caption from '{table_name}' where shortcode='{shortcode}' ORDER by taken_at_timestamp DESC """
     SqlTableQ=SqlTableQ.format(table_name=table_name,shortcode=str(shortcode))
-    print(SqlTableQ)
+    # print(SqlTableQ)
     con = sqlite3.connect(db_name)
     cursor = con.cursor()
     result = cursor.execute(SqlTableQ).fetchall()
