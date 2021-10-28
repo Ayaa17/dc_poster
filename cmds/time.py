@@ -5,8 +5,7 @@ import discord
 from discord.ext import commands
 import json, asyncio, datetime
 from ig_crawler import igcr
-from ig_crawler import init
-
+from ig_crawler import init, unit
 
 with open('setting.json', mode='r', encoding='utf8') as jFile:
     jdata = json.load(jFile)
@@ -17,8 +16,8 @@ class time(commands.Cog):
         self.is_listening: bool = False;
         # self.igcr = igcr.Singleton()
         self.bot = bot
-        # with open('setting.json', mode='r', encoding='utf8') as jFile:
-        #     jdata = json.load(jFile)
+        with open('setting.json', mode='r', encoding='utf8') as jFile:
+            self.jdata = json.load(jFile)
 
         async def interval():
             count = 0
@@ -54,11 +53,11 @@ class time(commands.Cog):
                     print(username + " start...")
                     await ctx.send(username + " start...")
                     newpost = _igcr.sendNewPost(username)
-                    pics=[]
+                    pics = []
                     for i in newpost:
                         pics.append(discord.File(i))
                         # pic = discord.File(i)
-                    if(pics!=[]):
+                    if (pics != []):
                         await ctx.send(files=pics)
             await asyncio.sleep(600)  # 單位:秒
 
@@ -67,33 +66,40 @@ class time(commands.Cog):
     async def golisten2(self, ctx):
         _igcr = igcr.Singleton()
         self.is_listening = True
-        while not self.bot.is_closed() and self.is_listening:
-            print(_igcr.islogin)
-            if (_igcr.islogin == True):
-                with open('setting.json', mode='r', encoding='utf8') as jFile:
-                    jdata = json.load(jFile)
-                aa = jdata["Ig"]
-                for username in aa:
-                    print(username + " start...")
-                    await ctx.send(username + " start...")
-                    _url=jdata[username]["url"]
-                    _img =jdata[username]["icon"]
-                    newPostShortcode=_igcr.setusername(username).getNew()
+        while not self.bot.is_closed() and self.is_listening and _igcr.islogin:
+            #     with open('setting.json', mode='r', encoding='utf8') as jFile:
+            #         jdata = json.load(jFile)
+            jdata = self.jdata
+            aa = jdata["Ig"]
+            for username in aa:
+                print(username + " start...")
+                # await ctx.send(username + " start...")
+                _url = jdata[username]["url"]
+                _img = jdata[username]["icon"]
+                is_new = _igcr.setusername(username).refresh()
+                if (1):
+                    newPostShortcode = _igcr.setusername(username).getNew()
                     for i in newPostShortcode:
-                        print(i[0])
-                        _description = _igcr.setusername(username).getDescription(i[0])
-                        embed=self.emm(username,_url,_description[0], _img ,i[0])
+                        with open('setting.json', mode='r', encoding='utf8') as jFile:
+                            jdata = json.load(jFile)
+                        # print(i[0])
+                        _description = _igcr.setusername(username).getDescription(i[0])[0]
+                        _time = _igcr.setusername(username).gettime(i[0])[0][0]
+                        _time = unit.trans2time(_time)
+                        embed = self.emm(username, _url, _description[0], _img, i[0], _time)
                         filedir = _igcr.getNewPost(username)[0]
                         pic = discord.File(filedir)
                         await ctx.send(file=pic, embed=embed)
+                        await asyncio.sleep(15)
+            await asyncio.sleep(60)
 
+            # 停止
 
-    # 停止
     @commands.command()
     async def stoplisten(self, ctx):
         self.is_listening = False
-        print("is_listening : "+str(self.is_listening))
-        await ctx.send("is_listening : "+str(self.is_listening))
+        print("is_listening : " + str(self.is_listening))
+        await ctx.send("is_listening : " + str(self.is_listening))
 
     # 開始
     @commands.command()
@@ -102,33 +108,37 @@ class time(commands.Cog):
         print("is_listening : " + str(self.is_listening))
         await ctx.send("is_listening : " + str(self.is_listening))
 
-    def emm(self, _title="Basic settings", _url='https://www.instagram.com/', _description="description",icon = "",_shortcode='' ):
-
+    def emm(self, _title="Basic settings", _url='https://www.instagram.com/', _description="description", icon="",
+            _shortcode='', time=''):
         embed = discord.Embed(title=_title,
                               url=_url,
-                              description=_description, color=0xf00000)
+                              description=_description + '\n\n.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______',
+                              color=0xf00000)
         embed.set_author(name="Geting IG post ",
                          url="",
                          icon_url="https://lh3.googleusercontent.com/7JuFAFpLXd1u0mqAAE9frT3ydyKsAsm7Hjl0FE_Kz6TKg7d_3vBgNdesrjF7fwQ3aMXM6Q=s85")
         embed.set_thumbnail(
             url=icon)
-        # embed.add_field(name="Time", value="undefined", inline=True)
+        post_url = f'[{_shortcode}]({init.url_prefix_post + _shortcode})'
+        embed.add_field(name="The post url", value=post_url, inline=True)
+
+        foot = f"Time: {time} UTC+8 "
+        icon_url = "https://cdn.icon-icons.com/icons2/2037/PNG/512/ig_instagram_media_social_icon_124260.png"
+        embed.set_footer(text=foot, icon_url=icon_url)
 
         file_dir_pre = init.file_dir
         file_dir = file_dir_pre.format(username=_title)
-        img=''
+        img = ''
         for j in os.listdir(file_dir):
             if (j.find(_shortcode) != -1):
                 # print(j)
                 img = 'attachment://' + j
                 break
-
         # img = 'attachment://'+str(_shortcode)+'_0.jpg'
         print(img)
         embed.set_image(url=img)
 
         return embed
-
 
 
 def setup(bot):

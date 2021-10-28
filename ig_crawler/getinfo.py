@@ -118,10 +118,10 @@ def getfirstxhr(browser, url, islogin):
             post.edge_media_preview_like = edge['node']['edge_media_preview_like']
 
             list_temp.append(post)
-            print(display_url)
+            # print(display_url)
 
     print(cursor, flag)
-    print(len(list_temp))
+    # print(len(list_temp))
 
     return cursor, flag, user, list_temp
 
@@ -228,7 +228,7 @@ def refresh(browser, url, islogin, database_name, username):
 
 def write2json(username='', icon=''):
     # json_r = open('setting.json', "r", encoding='utf8')
-    print(username,icon)
+    # print(username,icon)
     # json_r[username]["icon"] = icon
     # json_r.close()
     #

@@ -93,7 +93,6 @@ class Act(commands.Cog):
         with open('setting.json', mode='r', encoding='utf8') as jFile:
             jdata = json.load(jFile)
             username="whee_inthemood"
-
             print(jdata[username]['icon'])
         return
 

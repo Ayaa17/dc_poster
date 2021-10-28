@@ -68,6 +68,10 @@ class Singleton(object):
         print(self._database_name,self._username)
         description = database.serchDescription(self._database_name,self._username,shortcode)
         return description
+    def gettime(self,shortcode):
+        # print(self._database_name,self._username)
+        time = database.serchTime(self._database_name,self._username,shortcode)
+        return time
 
     def getNewPost(self,username):
         # file_dir_pre = ".\\media\\{username}\\"

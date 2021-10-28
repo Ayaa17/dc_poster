@@ -206,6 +206,14 @@ def serchDescription(db_name, table_name,shortcode):
     cursor = con.cursor()
     result = cursor.execute(SqlTableQ).fetchall()
     return result
+def serchTime(db_name, table_name,shortcode):
+    SqlTableQ = """select taken_at_timestamp from '{table_name}' where shortcode='{shortcode}' ORDER by taken_at_timestamp DESC """
+    SqlTableQ=SqlTableQ.format(table_name=table_name,shortcode=str(shortcode))
+    # print(SqlTableQ)
+    con = sqlite3.connect(db_name)
+    cursor = con.cursor()
+    result = cursor.execute(SqlTableQ).fetchall()
+    return result
 
 def updateSendDB(file_name, database_name, _Table_name):
     # 已存
