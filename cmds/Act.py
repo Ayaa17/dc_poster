@@ -50,17 +50,18 @@ class Act(commands.Cog):
     @commands.command()
     async def em(self, ctx):
         emm = self.emm()
-        # print(emm)
+        print(emm)
         pic = discord.File("E:\\Python\\pythonProject\\media\\xxazuki_ikuzaxx\\CVZ7kceBMDF_.jpg")
         pic2 = discord.File("E:\\Python\\pythonProject\\media\\xxazuki_ikuzaxx\\B8bDtybBxNZ_.jpg")
 
-        await ctx.send(files=[pic, pic2], embed=emm)
+        msg=await ctx.send(files=[pic, pic2], embed=emm)
+        await msg.add_reaction("✅")
         return
 
     def emm(self, _title="Basic settings", _url=init.url_whee, _description="description", ):
 
         _title = "solarkeem"
-        _url = jdata[_title]
+        _url = _url
         _description = igcr1.Singleton().setusername("solarkeem").getDescription("CUXSz5aPzIh")
         embed = discord.Embed(title=_title,
                               url=_url,
@@ -70,14 +71,13 @@ class Act(commands.Cog):
                          icon_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-84QJaofvWOR-Y_pUqut53hJ_-tkYiRBbWA&usqp=CAU")
         embed.set_thumbnail(
             url="attachment://CVZ7kceBMDF_.jpg")
-        # embed.add_field(name="Time", value="undefined", inline=True)
         embed.set_image(url="attachment://B8bDtybBxNZ_.jpg")
 
         return embed
 
     @commands.command()
     async def aa(self, ctx):
-        aa=igcr1.Singleton().setusername("solarkeem").getNew()
+        aa = igcr1.Singleton().setusername("solarkeem").getNew()
         for i in aa:
             print(i[0])
         return
@@ -92,9 +92,21 @@ class Act(commands.Cog):
     async def aza(self, ctx):
         with open('setting.json', mode='r', encoding='utf8') as jFile:
             jdata = json.load(jFile)
-            username="whee_inthemood"
+            username = "whee_inthemood"
             print(jdata[username]['icon'])
         return
+
+    @commands.command()
+    async def acc(self, ctx):
+        msg = await ctx.send("123")
+        await msg.add_reaction("✅")
+        return
+    @commands.command()
+    async def ac(self, ctx):
+        msg = await ctx.send("123")
+        # await ctx.ge
+        return
+
 
 def setup(bot):
     bot.add_cog(Act(bot))

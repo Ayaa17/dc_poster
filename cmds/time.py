@@ -72,26 +72,33 @@ class time(commands.Cog):
             jdata = self.jdata
             aa = jdata["Ig"]
             for username in aa:
-                print(username + " start...")
-                # await ctx.send(username + " start...")
-                _url = jdata[username]["url"]
-                _img = jdata[username]["icon"]
-                is_new = _igcr.setusername(username).refresh()
-                if (1):
-                    newPostShortcode = _igcr.setusername(username).getNew()
-                    for i in newPostShortcode:
-                        with open('setting.json', mode='r', encoding='utf8') as jFile:
-                            jdata = json.load(jFile)
-                        # print(i[0])
-                        _description = _igcr.setusername(username).getDescription(i[0])[0]
-                        _time = _igcr.setusername(username).gettime(i[0])[0][0]
-                        _time = unit.trans2time(_time)
-                        embed = self.emm(username, _url, _description[0], _img, i[0], _time)
-                        filedir = _igcr.getNewPost(username)[0]
-                        pic = discord.File(filedir)
-                        await ctx.send(file=pic, embed=embed)
+                try:
+                    print(username + " start...")
+                    # await ctx.send(username + " start...")
+                    _url = jdata[username]["url"]
+                    _img = jdata[username]["icon"]
+                    is_new =  _igcr.setusername(username).refresh()
+                    if (is_new):
+                        _igcr.setusername(username).downlaod()
+                        newPostShortcode =  _igcr.setusername(username).getNew()
+                        for i in newPostShortcode:
+                            with open('setting.json', mode='r', encoding='utf8') as jFile:
+                                jdata = json.load(jFile)
+                            # print(i[0])
+                            _description = _igcr.setusername(username).getDescription(i[0])[0]
+                            _time = _igcr.setusername(username).gettime(i[0])[0][0]
+                            _time = unit.trans2time(_time)
+                            embed = self.emm(username, _url, _description[0], _img, i[0], _time)
+                            filedir = _igcr.getPost(username, i[0])[0]
+                            # pic =  discord.File(filedir)
+                            await ctx.send(file=discord.File(filedir), embed=embed)
+                            await asyncio.sleep(15)
                         await asyncio.sleep(15)
-            await asyncio.sleep(60)
+                    await asyncio.sleep(15)
+                except:
+                    continue
+                await asyncio.sleep(60)
+            await asyncio.sleep(600)
 
             # 停止
 
