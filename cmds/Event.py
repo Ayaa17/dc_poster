@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
 import json
+import re
 from discord.abc import Messageable
+from ig_crawler import igcr
 
 with open('setting.json', mode='r', encoding='utf8') as jFile:
     jdata = json.load(jFile)
@@ -37,13 +39,26 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, data):
-        print("123")
-        print(data)
-        msg_id = data.message_id
         channel1 = self.bot.get_channel(int(jdata["channel_poster"]))
-        aaa=await channel1.fetch_message(msg_id)
-        print(aaa.embeds[0].to_dict())
-        # a=Messageable._get_channel.fetch_message(id=904742661758546013)
+        print(data.member.bot)
+        emoji="⤵"
+        msg_id = data.message_id
+        aaa = await channel1.fetch_message(msg_id)
+        # print(aaa.embeds[0].to_dict())
+        if (aaa.embeds[0] != None and  (not data.member.bot)):
+            current_embed = aaa.embeds[0].to_dict()
+            if (current_embed['author']['name'] == 'Geting IG post'):
+                username = current_embed['title']
+                current_field = current_embed['fields'][0]['value']
+                regex = re.compile(f'\[(.*?)]')
+                current_shortcode = regex.match(current_field).group(0)[1:-1]
+                imgs = igcr.Singleton().getPost(username=username, shortcode=current_shortcode)
+                pics =[]
+                for i in imgs:
+                    pic = discord.File(i)
+                    pics.append(pic)
+                await channel1.send(files=pics)
+        await aaa.remove_reaction(emoji, data.member)
 
 
 def setup(bot):

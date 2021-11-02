@@ -100,6 +100,7 @@ class Act(commands.Cog):
     async def acc(self, ctx):
         msg = await ctx.send("123")
         await msg.add_reaction("✅")
+        await msg.add_reaction("⤵")
         return
     @commands.command()
     async def ac(self, ctx):

@@ -78,7 +78,7 @@ class time(commands.Cog):
                     _url = jdata[username]["url"]
                     _img = jdata[username]["icon"]
                     is_new =  _igcr.setusername(username).refresh()
-                    if (is_new):
+                    if (1):
                         _igcr.setusername(username).downlaod()
                         newPostShortcode =  _igcr.setusername(username).getNew()
                         for i in newPostShortcode:
@@ -91,7 +91,8 @@ class time(commands.Cog):
                             embed = self.emm(username, _url, _description[0], _img, i[0], _time)
                             filedir = _igcr.getPost(username, i[0])[0]
                             # pic =  discord.File(filedir)
-                            await ctx.send(file=discord.File(filedir), embed=embed)
+                            sent_msg=await ctx.send(file=discord.File(filedir), embed=embed)
+                            await sent_msg.add_reaction("⤵")
                             await asyncio.sleep(15)
                         await asyncio.sleep(15)
                     await asyncio.sleep(15)
