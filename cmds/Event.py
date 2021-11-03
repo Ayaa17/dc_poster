@@ -58,7 +58,7 @@ class Event(commands.Cog):
                     pic = discord.File(i)
                     pics.append(pic)
                 await channel1.send(files=pics)
-        await aaa.remove_reaction(emoji, data.member)
+            await aaa.remove_reaction(emoji, data.member)
 
 
 def setup(bot):

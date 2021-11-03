@@ -16,6 +16,7 @@ class Act(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
         self.jdata = jdata
 
     @commands.command()
@@ -98,6 +99,8 @@ class Act(commands.Cog):
 
     @commands.command()
     async def acc(self, ctx):
+        print(discord.permissions.Permissions.use_slash_commands)
+
         msg = await ctx.send("123")
         await msg.add_reaction("✅")
         await msg.add_reaction("⤵")

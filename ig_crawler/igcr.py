@@ -65,7 +65,7 @@ class Singleton(object):
         newPostShortcode=database.serchNew(self._database_name,self._username)
         return newPostShortcode
     def getDescription(self,shortcode):
-        print(self._database_name,self._username)
+        # print(self._database_name,self._username)
         description = database.serchDescription(self._database_name,self._username,shortcode)
         return description
     def gettime(self,shortcode):

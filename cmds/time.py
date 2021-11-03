@@ -3,12 +3,19 @@ import os
 
 import discord
 from discord.ext import commands
+from discord_slash import SlashCommand
+from discord_slash import cog_ext
+
+
 import json, asyncio, datetime
 from ig_crawler import igcr
 from ig_crawler import init, unit
 
+
 with open('setting.json', mode='r', encoding='utf8') as jFile:
     jdata = json.load(jFile)
+
+
 
 
 class time(commands.Cog):
@@ -16,6 +23,7 @@ class time(commands.Cog):
         self.is_listening: bool = False;
         # self.igcr = igcr.Singleton()
         self.bot = bot
+
         with open('setting.json', mode='r', encoding='utf8') as jFile:
             self.jdata = json.load(jFile)
 
@@ -78,7 +86,7 @@ class time(commands.Cog):
                     _url = jdata[username]["url"]
                     _img = jdata[username]["icon"]
                     is_new =  _igcr.setusername(username).refresh()
-                    if (1):
+                    if (is_new):
                         _igcr.setusername(username).downlaod()
                         newPostShortcode =  _igcr.setusername(username).getNew()
                         for i in newPostShortcode:
@@ -143,10 +151,51 @@ class time(commands.Cog):
                 img = 'attachment://' + j
                 break
         # img = 'attachment://'+str(_shortcode)+'_0.jpg'
-        print(img)
+        # print(img)
         embed.set_image(url=img)
 
         return embed
+
+    @cog_ext.cog_slash(name="golistening", description="IG",guild_ids=jdata['guild_ids'])
+    async def golisten2(self, ctx):
+        await ctx.send("Start listening")
+        _igcr = igcr.Singleton()
+        self.is_listening = True
+        while not self.bot.is_closed() and self.is_listening and _igcr.islogin:
+            #     with open('setting.json', mode='r', encoding='utf8') as jFile:
+            #         jdata = json.load(jFile)
+            jdata = self.jdata
+            aa = jdata["Ig"]
+            for username in aa:
+                try:
+                    print(username + " start...")
+                    # await ctx.send(username + " start...")
+                    _url = jdata[username]["url"]
+                    _img = jdata[username]["icon"]
+                    is_new = _igcr.setusername(username).refresh()
+                    if (is_new):
+                        _igcr.setusername(username).downlaod()
+                        newPostShortcode = _igcr.setusername(username).getNew()
+                        for i in newPostShortcode:
+                            with open('setting.json', mode='r', encoding='utf8') as jFile:
+                                jdata = json.load(jFile)
+                            # print(i[0])
+                            _description = _igcr.setusername(username).getDescription(i[0])[0]
+                            _time = _igcr.setusername(username).gettime(i[0])[0][0]
+                            _time = unit.trans2time(_time)
+                            embed = self.emm(username, _url, _description[0], _img, i[0], _time)
+                            filedir = _igcr.getPost(username, i[0])[0]
+                            # pic =  discord.File(filedir)
+                            sent_msg = await ctx.send(file=discord.File(filedir), embed=embed)
+                            await sent_msg.add_reaction("⤵")
+                            await asyncio.sleep(15)
+                        await asyncio.sleep(15)
+                    await asyncio.sleep(15)
+                except:
+                    continue
+                await asyncio.sleep(60)
+            await asyncio.sleep(600)
+        await ctx.send("Close listeing")
 
 
 def setup(bot):
