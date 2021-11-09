@@ -182,11 +182,24 @@ def serchShortcode(db_name, table_name, shortcode):
 
 def serchNew(db_name, table_name):
     """
-    是否有相同post
+    找New post
     :param db_name:
     :return:
     """
     SqlTableQ = """select shortcode from '{table_name}' where is_send='False' ORDER by taken_at_timestamp DESC """
+    SqlTableQ=SqlTableQ.format(table_name=table_name)
+    con = sqlite3.connect(db_name)
+    cursor = con.cursor()
+    result = cursor.execute(SqlTableQ).fetchall()
+    return result
+
+def serchRandom(db_name, table_name):
+    """
+    隨機post
+    :param db_name:
+    :return:
+    """
+    SqlTableQ = """select shortcode from '{table_name}' """
     SqlTableQ=SqlTableQ.format(table_name=table_name)
     con = sqlite3.connect(db_name)
     cursor = con.cursor()

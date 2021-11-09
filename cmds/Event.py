@@ -40,7 +40,7 @@ class Event(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, data):
         channel1 = self.bot.get_channel(int(jdata["channel_poster"]))
-        print(data.member.bot)
+        # print(data.member.bot)
         emoji="⤵"
         msg_id = data.message_id
         aaa = await channel1.fetch_message(msg_id)

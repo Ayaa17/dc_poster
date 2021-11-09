@@ -1,5 +1,6 @@
 # import json
 import os
+import random
 import time
 
 from selenium import webdriver
@@ -61,6 +62,11 @@ class Singleton(object):
         print("OVER!!")
         return
 
+    def getrandom(self,username):
+        shorts_list = database.serchRandom(self._database_name, username)
+        random.shuffle(shorts_list)
+        return shorts_list[0]
+
     def getNew(self):
         newPostShortcode=database.serchNew(self._database_name,self._username)
         return newPostShortcode
@@ -82,6 +88,7 @@ class Singleton(object):
             if (j.find(shortcode) != -1):
                 pic_loc = file_dir + j
                 all_pic_loc.append(pic_loc)
+        # print(all_pic_loc)
         return all_pic_loc
 
     def getNewPost(self,username):

@@ -1,5 +1,6 @@
 import json
 import os.path
+import random
 
 import discord
 from discord.ext import commands
@@ -109,6 +110,15 @@ class Act(commands.Cog):
     async def ac(self, ctx):
         msg = await ctx.send("123")
         # await ctx.ge
+        return
+
+    @commands.command()
+    async def ab(self, ctx):
+        msg = await ctx.send("123")
+        shortcode_random=igcr1.Singleton().getrandom("solarkeem")
+        print(shortcode_random)
+        # await ctx.ge
+
         return
 
 

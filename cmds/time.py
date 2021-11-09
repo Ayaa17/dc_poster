@@ -1,21 +1,18 @@
 import datetime
 import os
+import random
 
 import discord
 from discord.ext import commands
 from discord_slash import SlashCommand
 from discord_slash import cog_ext
 
-
 import json, asyncio, datetime
 from ig_crawler import igcr
-from ig_crawler import init, unit
-
+from ig_crawler import init, unit, database
 
 with open('setting.json', mode='r', encoding='utf8') as jFile:
     jdata = json.load(jFile)
-
-
 
 
 class time(commands.Cog):
@@ -85,10 +82,10 @@ class time(commands.Cog):
                     # await ctx.send(username + " start...")
                     _url = jdata[username]["url"]
                     _img = jdata[username]["icon"]
-                    is_new =  _igcr.setusername(username).refresh()
+                    is_new = _igcr.setusername(username).refresh()
                     if (is_new):
                         _igcr.setusername(username).downlaod()
-                        newPostShortcode =  _igcr.setusername(username).getNew()
+                        newPostShortcode = _igcr.setusername(username).getNew()
                         for i in newPostShortcode:
                             with open('setting.json', mode='r', encoding='utf8') as jFile:
                                 jdata = json.load(jFile)
@@ -98,19 +95,114 @@ class time(commands.Cog):
                             _time = unit.trans2time(_time)
                             embed = self.emm(username, _url, _description[0], _img, i[0], _time)
                             filedir = _igcr.getPost(username, i[0])[0]
-                            # pic =  discord.File(filedir)
-                            sent_msg=await ctx.send(file=discord.File(filedir), embed=embed)
+                            pic = discord.File(filedir)
+                            sent_msg = await ctx.send(file=pic, embed=embed)
                             await sent_msg.add_reaction("⤵")
                             await asyncio.sleep(15)
                         await asyncio.sleep(15)
                     await asyncio.sleep(15)
                 except:
-                    continue
+                    print(username + " error...")
+                    return
                 await asyncio.sleep(60)
             await asyncio.sleep(600)
 
-            # 停止
+    @cog_ext.cog_slash(name="getNew", description="IG New post", guild_ids=jdata['guild_ids'])
+    async def getNew(self, ctx):
+        await ctx.send("Start ...")
+        _igcr = igcr.Singleton()
+        self.is_listening = True
+        if not self.bot.is_closed() and self.is_listening and _igcr.islogin:
+            #     with open('setting.json', mode='r', encoding='utf8') as jFile:
+            #         jdata = json.load(jFile)
+            jdata = self.jdata
+            aa = jdata["Ig"]
+            for username in aa:
+                try:
+                    print(username + " start...")
+                    # await ctx.send(username + " start...")
+                    _url = jdata[username]["url"]
+                    _img = jdata[username]["icon"]
+                    is_new = _igcr.setusername(username).refresh()
+                    if (is_new):
+                        _igcr.setusername(username).downlaod()
+                        newPostShortcode = _igcr.setusername(username).getNew()
+                        for i in newPostShortcode:
+                            with open('setting.json', mode='r', encoding='utf8') as jFile:
+                                jdata = json.load(jFile)
+                            # print(i[0])
+                            _description = _igcr.setusername(username).getDescription(i[0])[0]
+                            _time = _igcr.setusername(username).gettime(i[0])[0][0]
+                            _time = unit.trans2time(_time)
+                            embed = self.emm(username, _url, _description[0], _img, i[0], _time)
+                            filedir = _igcr.getPost(username, i[0])[0]
+                            pic = discord.File(filedir)
+                            sent_msg = await ctx.send(file=pic, embed=embed)
+                            await sent_msg.add_reaction("⤵")
+                            _database_name = 'Instagram_forbot.db'
+                            database.updateSendDB(i[0], _database_name, username)
+                    await asyncio.sleep(10)
+                except:
+                    print(username + "/WRONG")
+                    break;
+        await ctx.send("OVER!")
 
+    @cog_ext.cog_slash(name="getRandom", description="IG Random post", guild_ids=jdata['guild_ids'])
+    async def getrandom(self, ctx):
+        _igcr = igcr.Singleton()
+        jdata = self.jdata
+        username = jdata['Ig'][random.randint(0, 3)]
+        _url = jdata[username]["url"]
+        _img = jdata[username]["icon"]
+        randomShortcode = _igcr.getrandom(username)
+        # for i in randomShortcode:
+        # print(randomShortcode)
+        i = randomShortcode
+        _description = _igcr.setusername(username).getDescription(i[0])[0]
+        _time = _igcr.setusername(username).gettime(i[0])[0][0]
+        _time = unit.trans2time(_time)
+        embed = self.emm(username, _url, _description[0], _img, i[0], _time,True)
+        try:
+            filedir = _igcr.getPost(username, i[0])[0]
+        except:
+            print(username + "," + i[0])
+            ur=init.url_prefix_post+i[0]
+            await ctx.send("ERROR: " + username + "," + i[0]+"\n"+str(ur))
+            return
+        # print(filedir)
+        pic = discord.File(filedir)
+        sent_msg = await ctx.send(file=pic, embed=embed)
+        await sent_msg.add_reaction("⤵")
+
+
+    @cog_ext.cog_slash(name="getpost", description="IG the post", guild_ids=jdata['guild_ids'])
+    async def getpost00(self, ctx, username, shortcode):
+        _igcr = igcr.Singleton()
+        jdata = self.jdata
+        username = username
+        _url = jdata[username]["url"]
+        _img = jdata[username]["icon"]
+        # for i in randomShortcode:
+        # print(randomShortcode)
+        i = (shortcode,)
+        print(i[0])
+        _description = _igcr.setusername(username).getDescription(i[0])[0]
+        _time = _igcr.setusername(username).gettime(i[0])[0][0]
+        _time = unit.trans2time(_time)
+        embed = self.emm(username, _url, _description[0], _img, i[0], _time, True)
+        try:
+            filedir = _igcr.getPost(username, i[0])[0]
+        except:
+            print(username + "," + i[0])
+            ur = init.url_prefix_post + i[0]
+            await ctx.send("ERROR: " + username + "," + i[0] + "\n" + str(ur))
+            return
+        # print(filedir)
+        pic = discord.File(filedir)
+        sent_msg = await ctx.send(file=pic, embed=embed)
+        await sent_msg.add_reaction("⤵")
+
+    # 停止
     @commands.command()
     async def stoplisten(self, ctx):
         self.is_listening = False
@@ -125,7 +217,7 @@ class time(commands.Cog):
         await ctx.send("is_listening : " + str(self.is_listening))
 
     def emm(self, _title="Basic settings", _url='https://www.instagram.com/', _description="description", icon="",
-            _shortcode='', time=''):
+            _shortcode='', time='', random_: bool = False):
         embed = discord.Embed(title=_title,
                               url=_url,
                               description=_description + '\n\n.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______.______',
@@ -136,7 +228,10 @@ class time(commands.Cog):
         embed.set_thumbnail(
             url=icon)
         post_url = f'[{_shortcode}]({init.url_prefix_post + _shortcode})'
-        embed.add_field(name="The post url", value=post_url, inline=True)
+        if (random_):
+            embed.add_field(name="The Random Post URL", value=post_url, inline=True)
+        else:
+            embed.add_field(name="The New Post URL", value=post_url, inline=True)
 
         foot = f"Time: {time} UTC+8 "
         icon_url = "https://cdn.icon-icons.com/icons2/2037/PNG/512/ig_instagram_media_social_icon_124260.png"
@@ -156,7 +251,7 @@ class time(commands.Cog):
 
         return embed
 
-    @cog_ext.cog_slash(name="golistening", description="IG",guild_ids=jdata['guild_ids'])
+    @cog_ext.cog_slash(name="golistening", description="IG", guild_ids=jdata['guild_ids'])
     async def golisten2(self, ctx):
         await ctx.send("Start listening")
         _igcr = igcr.Singleton()
@@ -185,14 +280,14 @@ class time(commands.Cog):
                             _time = unit.trans2time(_time)
                             embed = self.emm(username, _url, _description[0], _img, i[0], _time)
                             filedir = _igcr.getPost(username, i[0])[0]
-                            # pic =  discord.File(filedir)
-                            sent_msg = await ctx.send(file=discord.File(filedir), embed=embed)
+                            pic = discord.File(filedir)
+                            sent_msg = await ctx.send(file=pic, embed=embed)
                             await sent_msg.add_reaction("⤵")
                             await asyncio.sleep(15)
                         await asyncio.sleep(15)
                     await asyncio.sleep(15)
                 except:
-                    continue
+                    break;
                 await asyncio.sleep(60)
             await asyncio.sleep(600)
         await ctx.send("Close listeing")
